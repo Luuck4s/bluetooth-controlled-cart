@@ -7,8 +7,6 @@
 int Engine_A_Number = 9; // Controlador de Ligado/Desligado, motor 1
 int Engine_B_Number = 10; // Controlador de Ligado/Desligado, motor 2
 
-int DefaultEngineOnVelocity = 150; // "Velocidade" default do carrinho
-
 int Engine_A_Input_1_Number = 2; // Input 1 do motor 1
 int Engine_A_Input_2_Number = 3; // Input 2 do motor 1
 
@@ -108,13 +106,13 @@ void stopEngine_A(){
 }
 
 void startEngine_A_ToFront(){
-  analogWrite(Engine_A_Number, DefaultEngineOnVelocity);
+  analogWrite(Engine_A_Number, vSpeed);
   digitalWrite(Engine_A_Input_1_Number, HIGH);
   digitalWrite(Engine_A_Input_2_Number, LOW);
 }
 
 void startEngine_A_ToBack(){
-  analogWrite(Engine_A_Number, DefaultEngineOnVelocity);
+  analogWrite(Engine_A_Number, vSpeed);
   digitalWrite(Engine_A_Input_1_Number, LOW);
   digitalWrite(Engine_A_Input_2_Number, HIGH);
 }
@@ -129,14 +127,14 @@ void stopEngine_B(){
 }
 
 void startEngine_B_ToFront(){
-  analogWrite(Engine_B_Number, DefaultEngineOnVelocity);
+  analogWrite(Engine_B_Number, vSpeed);
   digitalWrite(Engine_B_Input_1_Number, HIGH);
   digitalWrite(Engine_B_Input_2_Number, LOW);
 }
 
 
 void startEngine_B_ToBack(){
-  analogWrite(Engine_B_Number, DefaultEngineOnVelocity);
+  analogWrite(Engine_B_Number, vSpeed);
   digitalWrite(Engine_B_Input_1_Number, LOW);
   digitalWrite(Engine_B_Input_2_Number, HIGH);
 }
