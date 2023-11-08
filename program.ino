@@ -17,6 +17,10 @@ int Engine_B_Input_2_Number = 5; // Input 2 do motor 2
 
 char Direction;
 
+int state_rec;
+int vSpeed = 0; // Velocidade Default dos motores 
+char state;
+
 void setup()
 {
   Serial.begin(9600);
@@ -34,37 +38,66 @@ void setup()
 void loop()
 {
   if(Serial.available()){
-    Direction = Serial.read();
-    Serial.println(Direction);
+    state_rec = Serial.read();
+    state = state_rec;
+  }
+
+  if (state == '0') {
+    vSpeed = 0;
+  }
+  else if (state == '4') {
+    vSpeed = 100;
+  }
+  else if (state == '6') {
+    vSpeed = 155;
+  }
+  else if (state == '7') {
+    vSpeed = 180;
+  }
+  else if (state == '8') {
+    vSpeed = 200;
+  }
+  else if (state == '9') {
+    vSpeed = 230;
+  }
+  else if (state == 'q') {
+    vSpeed = 255;
   }
   
   if(Direction == 'F')
   {
-     startEngine_A_ToFront();
-  	 startEngine_B_ToFront();
-     return;
+    stopEngine_A();
+    stopEngine_B();
+    startEngine_A_ToFront();
+  	startEngine_B_ToFront();
   }
   if(Direction == 'B')
   {
+    stopEngine_A();
+    stopEngine_B();
     startEngine_A_ToBack();
     startEngine_B_ToBack();
-    return;
   }
   if(Direction == 'L')
   {
+    stopEngine_A();
+    stopEngine_B();
     startEngine_A_ToBack();
     startEngine_B_ToFront();
-    return;
   }
   if(Direction == 'R')
   {
+    stopEngine_A();
+    stopEngine_B();
     startEngine_A_ToFront();
     startEngine_B_ToBack();
-    return;
   }
-  
-  stopEngine_A();
-  stopEngine_B();
+
+  if(Direction == 'S')
+  {
+    stopEngine_A();
+    stopEngine_B();
+  }
 }
 
 #pragma region "Engine A"
