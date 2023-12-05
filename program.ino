@@ -3,87 +3,52 @@
 * Projeto de Engenharia Unificada II 
 * Carrinho de controle remoto controlado por bluetooth
 */
+#include <AFMotor.h>    // Inclui a Biblioteca AFMotor.h - Adafruit-Motor-Shield-library
 
-int Engine_A_Number = 9; // Controlador de Ligado/Desligado, motor 1
-int Engine_B_Number = 10; // Controlador de Ligado/Desligado, motor 2
-
-int Engine_A_Input_1_Number = 2; // Input 1 do motor 1
-int Engine_A_Input_2_Number = 3; // Input 2 do motor 1
-
-int Engine_B_Input_1_Number = 6; // Input 1 do motor 2
-int Engine_B_Input_2_Number = 5; // Input 2 do motor 2
+AF_DCMotor engine_a(1);
+AF_DCMotor engine_b(2);
 
 char Direction;
 
 int state_rec;
-int vSpeed = 0; // Velocidade Default dos motores 
-char state;
+int vSpeed = 400; // Velocidade Default dos motores
 
 void setup()
 {
   Serial.begin(9600);
-
-  pinMode(Engine_A_Number, OUTPUT); 
-  pinMode(Engine_B_Number, OUTPUT); 
-
-  pinMode(Engine_A_Input_1_Number, OUTPUT);
-  pinMode(Engine_A_Input_2_Number, OUTPUT);
-  
-  pinMode(Engine_B_Input_1_Number, OUTPUT);
-  pinMode(Engine_B_Input_2_Number, OUTPUT);
 }
 
 void loop()
 {
-  if(Serial.available()){
+  if(Serial.available() > 0){
     state_rec = Serial.read();
-    state = state_rec;
-  }
-
-  if (state == '0') {
-    vSpeed = 0;
-  }
-  else if (state == '4') {
-    vSpeed = 100;
-  }
-  else if (state == '6') {
-    vSpeed = 155;
-  }
-  else if (state == '7') {
-    vSpeed = 180;
-  }
-  else if (state == '8') {
-    vSpeed = 200;
-  }
-  else if (state == '9') {
-    vSpeed = 230;
-  }
-  else if (state == 'q') {
-    vSpeed = 255;
+    Direction = state_rec;
+    Serial.println(state_rec);
+    Serial.println(state_rec == 1);
   }
   
-  if(Direction == 'F')
+  if(Direction == 1 || Direction == 51)
   {
     stopEngine_A();
     stopEngine_B();
     startEngine_A_ToFront();
   	startEngine_B_ToFront();
   }
-  if(Direction == 'B')
+  if(Direction == 2 || Direction == 52)
   {
     stopEngine_A();
     stopEngine_B();
     startEngine_A_ToBack();
     startEngine_B_ToBack();
   }
-  if(Direction == 'L')
+  if(Direction == 3 || Direction == 53)
   {
     stopEngine_A();
     stopEngine_B();
     startEngine_A_ToBack();
     startEngine_B_ToFront();
   }
-  if(Direction == 'R')
+  if(Direction == 4 || Direction == 54)
   {
     stopEngine_A();
     stopEngine_B();
@@ -101,20 +66,19 @@ void loop()
 #pragma region "Engine A"
 
 void stopEngine_A(){
-  analogWrite(Engine_A_Number, 0);
+  engine_a.setSpeed(0);
+  engine_a.run(RELEASE);
   delay(200);
 }
 
 void startEngine_A_ToFront(){
-  analogWrite(Engine_A_Number, vSpeed);
-  digitalWrite(Engine_A_Input_1_Number, HIGH);
-  digitalWrite(Engine_A_Input_2_Number, LOW);
+  engine_a.run(FORWARD);
+  engine_a.setSpeed(vSpeed);
 }
 
 void startEngine_A_ToBack(){
-  analogWrite(Engine_A_Number, vSpeed);
-  digitalWrite(Engine_A_Input_1_Number, LOW);
-  digitalWrite(Engine_A_Input_2_Number, HIGH);
+  engine_a.run(BACKWARD);
+  engine_a.setSpeed(vSpeed);
 }
 
 #pragma endregion
@@ -122,21 +86,20 @@ void startEngine_A_ToBack(){
 #pragma region "Engine B"
 
 void stopEngine_B(){
-  analogWrite(Engine_B_Number, 0);
+  engine_b.setSpeed(0);
+  engine_b.run(RELEASE);
   delay(200);
 }
 
 void startEngine_B_ToFront(){
-  analogWrite(Engine_B_Number, vSpeed);
-  digitalWrite(Engine_B_Input_1_Number, HIGH);
-  digitalWrite(Engine_B_Input_2_Number, LOW);
+  engine_b.run(FORWARD);
+  engine_b.setSpeed(vSpeed);
 }
 
 
 void startEngine_B_ToBack(){
-  analogWrite(Engine_B_Number, vSpeed);
-  digitalWrite(Engine_B_Input_1_Number, LOW);
-  digitalWrite(Engine_B_Input_2_Number, HIGH);
+  engine_b.run(BACKWARD);
+  engine_b.setSpeed(vSpeed);
 }
 
 #pragma endregion
